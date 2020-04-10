@@ -11,8 +11,7 @@ namespace FluentSecurity.Configuration
 
 		internal AdvancedConfiguration(SecurityRuntime runtime)
 		{
-			if (runtime == null) throw new ArgumentNullException("runtime");
-			_runtime = runtime;
+            _runtime = runtime ?? throw new ArgumentNullException(nameof(runtime));
 
 			if (!_runtime.Conventions.Any())
 			{
@@ -29,9 +28,9 @@ namespace FluentSecurity.Configuration
 			_runtime.ShouldIgnoreMissingConfiguration = true;
 		}
 
-		public void ModifySecurityContext(Action<ISecurityContext> modifyer)
+		public void ModifySecurityContext(Action<ISecurityContext> modifier)
 		{
-			_runtime.SecurityContextModifyer = modifyer;
+			_runtime.SecurityContextModifyer = modifier;
 		}
 
 		public void SetDefaultResultsCacheLifecycle(Cache lifecycle)
@@ -41,13 +40,13 @@ namespace FluentSecurity.Configuration
 
 		public void Violations(Action<ViolationConfiguration> violationConfiguration)
 		{
-			if (violationConfiguration == null) throw new ArgumentNullException("violationConfiguration");
+			if (violationConfiguration == null) throw new ArgumentNullException(nameof(violationConfiguration));
 			_runtime.ApplyConfiguration(violationConfiguration);
 		}
 
 		public void Conventions(Action<ConventionConfiguration> conventions)
 		{
-			if (conventions == null) throw new ArgumentNullException("conventions");
+			if (conventions == null) throw new ArgumentNullException(nameof(conventions));
 			_runtime.ApplyConfiguration(conventions);
 		}
 	}

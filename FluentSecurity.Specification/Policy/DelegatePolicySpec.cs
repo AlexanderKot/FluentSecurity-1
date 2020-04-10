@@ -1,5 +1,5 @@
 using System;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using FluentSecurity.Policy;
 using FluentSecurity.Policy.Contexts;
 using FluentSecurity.Policy.Results;

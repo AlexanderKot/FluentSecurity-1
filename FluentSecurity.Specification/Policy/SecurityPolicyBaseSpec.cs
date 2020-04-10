@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Web.Routing;
+using Microsoft.AspNetCore.Routing;
 using FluentSecurity.Policy;
 using FluentSecurity.Policy.Contexts;
 using FluentSecurity.Specification.Helpers;

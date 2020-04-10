@@ -16,7 +16,7 @@ namespace FluentSecurity
 		public SecurityConfiguration(Action<RootConfiguration> configurationExpression)
 		{
 			if (configurationExpression == null)
-				throw new ArgumentNullException("configurationExpression");
+				throw new ArgumentNullException(nameof(configurationExpression));
 
 			var configuration = new RootConfiguration();
 			configurationExpression.Invoke(configuration);
@@ -25,8 +25,8 @@ namespace FluentSecurity
 			PolicyContainers = Runtime.PolicyContainers;
 		}
 
-		public ISecurityRuntime Runtime { get; private set; }
-		public IEnumerable<IPolicyContainer> PolicyContainers { get; private set; }
+		public ISecurityRuntime Runtime { get; }
+		public IEnumerable<IPolicyContainer> PolicyContainers { get; }
 
 		public string WhatDoIHave()
 		{
@@ -89,7 +89,7 @@ namespace FluentSecurity
 		internal static void SetConfiguration(ISecurityConfiguration configuration)
 		{
 			if (configuration == null)
-				throw new ArgumentNullException("configuration");
+				throw new ArgumentNullException(nameof(configuration));
 
 			lock (LockObject)
 			{

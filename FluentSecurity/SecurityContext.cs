@@ -14,13 +14,13 @@ namespace FluentSecurity
 			Data = new ExpandoObject();
 			Runtime = runtime;
 
-			var modifyer = runtime.SecurityContextModifyer;
-			if (modifyer != null) modifyer.Invoke(this);
-		}
+			var modifier = runtime.SecurityContextModifyer;
+            modifier?.Invoke(this);
+        }
 
-		public Guid Id { get; private set; }
-		public dynamic Data { get; private set; }
-		public ISecurityRuntime Runtime { get; private set; }
+		public Guid Id { get; }
+		public dynamic Data { get; }
+		public ISecurityRuntime Runtime { get; }
 
 		public bool CurrentUserIsAuthenticated()
 		{
@@ -29,23 +29,16 @@ namespace FluentSecurity
 
 		public IEnumerable<object> CurrentUserRoles()
 		{
-			return Runtime.Roles != null ? Runtime.Roles.Invoke() : null;
+			return Runtime.Roles?.Invoke();
 		}
 
-		public static ISecurityContext Current
-		{
-			get
-			{
-				return ServiceLocator.Current.Resolve<ISecurityContext>();
-			}
-		}
+		public static ISecurityContext Current => ServiceLocator.Current.Resolve<ISecurityContext>();
 
-		internal static ISecurityContext CreateFrom(ISecurityConfiguration configuration)
+        internal static ISecurityContext CreateFrom(ISecurityConfiguration configuration)
 		{
 			ISecurityContext context = null;
 
-			var securityConfiguration = configuration as SecurityConfiguration;
-			if (securityConfiguration != null)
+            if (configuration is SecurityConfiguration securityConfiguration)
 			{
 				var externalServiceLocator = securityConfiguration.Runtime.ExternalServiceLocator;
 				if (externalServiceLocator != null)

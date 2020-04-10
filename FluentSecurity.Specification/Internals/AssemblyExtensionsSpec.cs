@@ -16,13 +16,13 @@ namespace FluentSecurity.Specification.Internals
 		[SetUp]
 		public void SetUp()
 		{
-			AssemblyExtensions.Reset();
+			FluentSecurity.Internals.AssemblyExtensions.Reset();
 		}
 
 		[TearDown]
 		public void TearDown()
 		{
-			AssemblyExtensions.Reset();
+			FluentSecurity.Internals.AssemblyExtensions.Reset();
 		}
 
 		[Test]
@@ -52,7 +52,7 @@ namespace FluentSecurity.Specification.Internals
 		public void Should_return_types_successfully_loaded()
 		{
 			// Arrange
-			AssemblyExtensions.GetTypesProvider = a =>
+			FluentSecurity.Internals.AssemblyExtensions.GetTypesProvider = a =>
 			{
 				throw new ReflectionTypeLoadException(new List<Type>
 				{
@@ -80,7 +80,7 @@ namespace FluentSecurity.Specification.Internals
 		[SetUp]
 		public void SetUp()
 		{
-			AssemblyExtensions.Reset();
+			FluentSecurity.Internals.AssemblyExtensions.Reset();
 		}
 
 		[Test]
@@ -110,7 +110,7 @@ namespace FluentSecurity.Specification.Internals
 		public void Should_return_types_successfully_loaded()
 		{
 			// Arrange
-			AssemblyExtensions.GetTypesProvider = a =>
+			FluentSecurity.Internals.AssemblyExtensions.GetTypesProvider = a =>
 			{
 				throw new ReflectionTypeLoadException(new List<Type>
 				{

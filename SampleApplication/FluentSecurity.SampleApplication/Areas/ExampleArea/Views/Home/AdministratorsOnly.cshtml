@@ -1,0 +1,22 @@
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>title</title>
+</head>
+<body>
+    <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
+        AdministratorsOnly
+    </asp:Content>
+
+    <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+        <h1>Administrators only</h1>
+
+        <p>This page should only be displayed if the user is an administrator.</p>
+    </asp:Content>
+</body>
+</html>

@@ -10,7 +10,7 @@ namespace FluentSecurity.Scanning
 {
 	public class AssemblyScanner
 	{
-		public ScannerContext Context { get; private set; }
+		public ScannerContext Context { get; }
 
 		public AssemblyScanner()
 		{
@@ -24,10 +24,10 @@ namespace FluentSecurity.Scanning
 
 		public void Assemblies(IEnumerable<Assembly> assemblies)
 		{
-			if (assemblies == null) throw new ArgumentNullException("assemblies");
+			if (assemblies == null) throw new ArgumentNullException(nameof(assemblies));
 
 			var assembliesToScan = assemblies.ToList();
-			if (assembliesToScan.Any(a => a == null)) throw new ArgumentException("Assemblies must not contain null values.", "assemblies");
+			if (assembliesToScan.Any(a => a == null)) throw new ArgumentException("Assemblies must not contain null values.", nameof(assemblies));
 
 			assembliesToScan.ForEach(Assembly);
 		}
@@ -47,7 +47,7 @@ namespace FluentSecurity.Scanning
 			for (var i = 0; i < trace.FrameCount; i++)
 			{
 				var frame = trace.GetFrame(i);
-				var assembly = frame.GetMethod().DeclaringType.Assembly;
+				var assembly = frame.GetMethod().DeclaringType?.Assembly;
 				if (assembly != thisAssembly)
 				{
 					callingAssembly = assembly;
@@ -67,8 +67,8 @@ namespace FluentSecurity.Scanning
 			var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 			AssembliesFromPath(baseDirectory, assemblyFilter);
 
-			var binDirectory = AppDomain.CurrentDomain.SetupInformation.PrivateBinPath;
-			AssembliesFromPath(binDirectory, assemblyFilter);
+			//var binDirectory = AppDomain.CurrentDomain.SetupInformation.PrivateBinPath;
+			//AssembliesFromPath(binDirectory, assemblyFilter);
 		}
 
 		public void AssembliesFromPath(string path, Predicate<Assembly> assemblyFilter)
@@ -79,9 +79,15 @@ namespace FluentSecurity.Scanning
 
 			foreach (var assemblyPath in assemblyPaths)
 			{
-				var assembly = System.Reflection.Assembly.LoadFrom(assemblyPath);
-				if (assembly != null && assemblyFilter.Invoke(assembly))
-					Assembly(assembly);
+				try
+                {
+                    var assembly = System.Reflection.Assembly.LoadFrom(assemblyPath);
+                    if (assembly != null && !Context.AssembliesToScan.Contains(assembly) && assemblyFilter.Invoke(assembly))
+                        Assembly(assembly);
+                }
+                catch (Exception)
+                { }
+					
 			}
 		}
 

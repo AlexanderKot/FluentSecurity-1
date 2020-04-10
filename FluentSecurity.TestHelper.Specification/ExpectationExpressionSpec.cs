@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using FluentSecurity.TestHelper.Expectations;
 using FluentSecurity.TestHelper.Specification.TestData;
 using NUnit.Framework;

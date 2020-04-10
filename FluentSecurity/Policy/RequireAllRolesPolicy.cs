@@ -12,7 +12,7 @@ namespace FluentSecurity.Policy
 		public RequireAllRolesPolicy(params object[] requiredRoles)
 		{
 			if (requiredRoles == null)
-				throw new ArgumentNullException("requiredRoles", "Required roles must not be null");
+				throw new ArgumentNullException(nameof(requiredRoles), "Required roles must not be null");
 
 			if (requiredRoles.Length == 0)
 				throw new ArgumentException("Required roles must be specified");
@@ -20,12 +20,9 @@ namespace FluentSecurity.Policy
 			_requiredRoles = requiredRoles;
 		}
 
-		public IEnumerable<object> RolesRequired
-		{
-			get { return _requiredRoles; }
-		}
+		public IEnumerable<object> RolesRequired => _requiredRoles;
 
-		public PolicyResult Enforce(ISecurityContext context)
+        public PolicyResult Enforce(ISecurityContext context)
 		{
 			if (context.CurrentUserIsAuthenticated() == false)
 				return PolicyResult.CreateFailureResult(this, "Anonymous access denied");

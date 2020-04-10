@@ -21,12 +21,11 @@ namespace FluentSecurity.Configuration
 
 	public class ViolationHandlerConfiguration : ViolationHandlerConfigurationBase
 	{
-		public Func<PolicyResult, bool> Predicate { get; private set; }
+		public Func<PolicyResult, bool> Predicate { get; }
 
 		internal ViolationHandlerConfiguration(ViolationConfiguration violationConfiguration, Func<PolicyResult, bool> predicate) : base(violationConfiguration)
 		{
-			if (predicate == null) throw new ArgumentNullException("predicate");
-			Predicate = predicate;
+            Predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
 		}
 
 		public void IsHandledBy<TPolicyViolationHandler>() where TPolicyViolationHandler : class, IPolicyViolationHandler
@@ -42,12 +41,11 @@ namespace FluentSecurity.Configuration
 
 	public abstract class ViolationHandlerConfigurationBase
 	{
-		protected ViolationConfiguration ViolationConfiguration { get; private set; }
+		protected ViolationConfiguration ViolationConfiguration { get; }
 
 		internal ViolationHandlerConfigurationBase(ViolationConfiguration violationConfiguration)
 		{
-			if (violationConfiguration == null) throw new ArgumentNullException("violationConfiguration");
-			ViolationConfiguration = violationConfiguration;
+            ViolationConfiguration = violationConfiguration ?? throw new ArgumentNullException(nameof(violationConfiguration));
 		}
 	}
 }

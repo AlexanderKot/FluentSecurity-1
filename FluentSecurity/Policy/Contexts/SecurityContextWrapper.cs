@@ -9,23 +9,14 @@ namespace FluentSecurity.Policy.Contexts
 
 		public SecurityContextWrapper(ISecurityContext securityContext)
 		{
-			if (securityContext == null)
-				throw new ArgumentNullException("securityContext");
-			
-			_securityContext = securityContext;
+            _securityContext = securityContext ?? throw new ArgumentNullException(nameof(securityContext));
 		}
 
-		public Guid Id
-		{
-			get { return _securityContext.Id; }
-		}
+		public Guid Id => _securityContext.Id;
 
-		public dynamic Data
-		{
-			get { return _securityContext.Data; }
-		}
+        public dynamic Data => _securityContext.Data;
 
-		public bool CurrentUserIsAuthenticated()
+        public bool CurrentUserIsAuthenticated()
 		{
 			return _securityContext.CurrentUserIsAuthenticated();
 		}
@@ -35,9 +26,6 @@ namespace FluentSecurity.Policy.Contexts
 			return _securityContext.CurrentUserRoles();
 		}
 
-		public ISecurityRuntime Runtime
-		{
-			get { return _securityContext.Runtime; }
-		}
-	}
+		public ISecurityRuntime Runtime => _securityContext.Runtime;
+    }
 }

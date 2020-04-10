@@ -6,7 +6,7 @@ using FluentSecurity.Policy;
 using FluentSecurity.Specification.Helpers;
 using FluentSecurity.Specification.TestData;
 using NUnit.Framework;
-using Rhino.Mocks;
+using Moq;
 
 namespace FluentSecurity.Specification
 {
@@ -19,10 +19,10 @@ namespace FluentSecurity.Specification
 		{
 			// Arrange
 			SecurityConfigurator.Reset();
-			var configuration = MockRepository.GenerateMock<ISecurityConfiguration>();
+			var configuration = new Mock<ISecurityConfiguration>();
 
 			// Act
-			SecurityConfigurator.SetConfiguration(configuration);
+			SecurityConfigurator.SetConfiguration(configuration.Object);
 
 			// Assert
 			Assert.That(SecurityConfiguration.Current, Is.EqualTo(configuration));
@@ -48,8 +48,8 @@ namespace FluentSecurity.Specification
 		public void Should_create_new_configuration_instance()
 		{
 			// Arrange
-			var configuration = MockRepository.GenerateMock<ISecurityConfiguration>();
-			SecurityConfigurator.SetConfiguration(configuration);
+			var configuration = new Mock<ISecurityConfiguration>();
+			SecurityConfigurator.SetConfiguration(configuration.Object);
 
 			// Act
 			SecurityConfigurator.Reset();

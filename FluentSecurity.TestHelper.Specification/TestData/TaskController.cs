@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FluentSecurity.TestHelper.Specification.TestData
 {
-	public class TaskController : AsyncController
+	public class TaskController : Controller
 	{
 		public Task<ActionResult> LongRunningAction()
 		{

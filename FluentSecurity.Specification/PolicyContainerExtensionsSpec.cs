@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using FluentSecurity.Policy;
 using FluentSecurity.Policy.Contexts;
 using FluentSecurity.Specification.Helpers;
@@ -110,10 +110,10 @@ namespace FluentSecurity.Specification
 			var policyContainer = TestDataFactory.CreateValidPolicyContainer();
 
 			// Act
-			policyContainer.RequireRole(UserRole.Writer);
+			policyContainer.RequireAnyRole(UserRole.Writer);
 
 			// Assert
-			var securityPolicy = policyContainer.GetPolicies().Single(x => x.GetType() == typeof(RequireRolePolicy));
+			var securityPolicy = policyContainer.GetPolicies().Single(x => x.GetType() == typeof(RequireAnyRolePolicy));
 			Assert.That(securityPolicy, Is.Not.Null);
 		}
 	}

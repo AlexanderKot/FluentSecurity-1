@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using FluentSecurity.Diagnostics;
 using FluentSecurity.Internals;
 using FluentSecurity.Policy.ViolationHandlers;
@@ -12,9 +12,9 @@ namespace FluentSecurity
 	{
 		public ActionResult HandleSecurityFor(string controllerName, string actionName, ISecurityContext securityContext)
 		{
-			if (controllerName.IsNullOrEmpty()) throw new ArgumentException("Controllername must not be null or empty", "controllerName");
-			if (actionName.IsNullOrEmpty()) throw new ArgumentException("Actionname must not be null or empty", "actionName");
-			if (securityContext == null) throw new ArgumentNullException("securityContext", "Security context must not be null");
+			if (controllerName.IsNullOrEmpty()) throw new ArgumentException("Controllername must not be null or empty", nameof(controllerName));
+			if (actionName.IsNullOrEmpty()) throw new ArgumentException("Actionname must not be null or empty", nameof(actionName));
+			if (securityContext == null) throw new ArgumentNullException(nameof(securityContext), "Security context must not be null");
 
 			var runtime = securityContext.Runtime;
 

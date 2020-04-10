@@ -5,11 +5,12 @@ using System.Globalization;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Mvc;
-using System.Web.Routing;
+using Microsoft.AspNetCore.Mvc;
 using FluentSecurity.Policy;
 using FluentSecurity.Specification.Helpers;
 using NUnit.Framework;
+using Microsoft.AspNetCore.Routing;
+using Moq;
 
 namespace FluentSecurity.Specification
 {
@@ -82,7 +83,7 @@ namespace FluentSecurity.Specification
 		[Test]
 		public void Should_return_a_container_for_Controller_ActIonThatDoesExist_EN()
 		{
-			Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+			CultureInfo.CurrentCulture = new CultureInfo("en-US"); //Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
 			var policyContainer = _containers.GetContainerFor("Controller", "ActIonThatDoesExist");
 			Assert.That(policyContainer, Is.Not.Null);
 		}
@@ -90,7 +91,7 @@ namespace FluentSecurity.Specification
 		[Test]
 		public void Should_return_a_container_for_Controller_ActIonThatDoesExist_TR()
 		{
-			Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR");
+			CultureInfo.CurrentCulture = new CultureInfo("tr-TR"); //Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR");
 			var policyContainer = _containers.GetContainerFor("Controller", "ActIonThatDoesExist");
 			Assert.That(policyContainer, Is.Not.Null);
 		}
@@ -123,8 +124,9 @@ namespace FluentSecurity.Specification
 		public void Should_return_the_are_name_from_data_tokens()
 		{
 			// Arrange
-			var route = new Route("some-url", new MvcRouteHandler());
-			route.DataTokens = new RouteValueDictionary();
+			
+			var route = new Route(new Mock<IRouter>().Object, "some-url", new Mock<IInlineConstraintResolver>().Object);
+			//route.DataTokens = new RouteValueDictionary();
 			route.DataTokens.Add("area", "AreaName");
 
 			// Act
@@ -151,7 +153,7 @@ namespace FluentSecurity.Specification
 		public void Should_return_emtpy_string_when_DataTokens_is_null()
 		{
 			// Arrange
-			var route = new Route("some-url", new MvcRouteHandler());
+			var route = new Route(new Mock<IRouter>().Object, "some-url", new Mock<IInlineConstraintResolver>().Object); //var route = new Route("some-url", new MvcRouteHandler());
 
 			// Act
 			var areaName = route.GetAreaName();
@@ -160,9 +162,9 @@ namespace FluentSecurity.Specification
 			Assert.That(areaName, Is.Empty);
 		}
 
-		private class AreaRoute : Route, IRouteWithArea
+		private class AreaRoute : Route//, IRouteWithArea
 		{
-			public AreaRoute() : base("some-url", new MvcRouteHandler()) { }
+			public AreaRoute() : base(new Mock<IRouter>().Object, "some-url", new Mock<IInlineConstraintResolver>().Object) { } //base("some-url", new MvcRouteHandler()) { }
 
 			public string Area
 			{
@@ -221,12 +223,12 @@ namespace FluentSecurity.Specification
 				return false;
 			}
 
-			public ActionResult InstanceMethodCallExpression()
+			public Microsoft.AspNetCore.Mvc.ActionResult InstanceMethodCallExpression()
 			{
 				return new EmptyResult();
 			}
 			
-			[ActionName("AliasAction")]
+			[Microsoft.AspNetCore.Mvc.ActionName("AliasAction")]
 			public ActionResult ActualAction()
 			{
 				return new EmptyResult();
@@ -263,6 +265,15 @@ namespace FluentSecurity.Specification
 	[Category("ExtensionsSpecs")]
 	public class When_checking_if_a_type_is_a_controller_action_return_type
 	{
+		internal class JavaScriptResult : ContentResult
+		{
+			public JavaScriptResult(string script)
+			{
+				this.Content = script;
+				this.ContentType = "application/javascript";
+			}
+		}
+
 		[Test]
 		public void Should_be_true_for_ActionResult()
 		{
@@ -290,7 +301,7 @@ namespace FluentSecurity.Specification
 		[Test]
 		public void Should_be_true_for_HttpStatusCodeResult()
 		{
-			Assert.That(typeof(HttpStatusCodeResult).IsControllerActionReturnType(), Is.True);
+			Assert.That(typeof(StatusCodeResult).IsControllerActionReturnType(), Is.True);
 		}
 
 		[Test]
@@ -356,7 +367,7 @@ namespace FluentSecurity.Specification
 		[Test]
 		public void Should_be_true_for_Task_of_HttpStatusCodeResult()
 		{
-			Assert.That(typeof(Task<HttpStatusCodeResult>).IsControllerActionReturnType(), Is.True);
+			Assert.That(typeof(Task<StatusCodeResult>).IsControllerActionReturnType(), Is.True);
 		}
 
 		[Test]

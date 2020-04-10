@@ -1,6 +1,7 @@
 using System;
 using FluentSecurity.Diagnostics;
 using FluentSecurity.ServiceLocation;
+using Microsoft.AspNetCore.Http;
 
 namespace FluentSecurity
 {

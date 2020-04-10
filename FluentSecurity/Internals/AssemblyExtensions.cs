@@ -21,7 +21,7 @@ namespace FluentSecurity.Internals
 
 		internal static IEnumerable<Type> GetLoadableTypes(this Assembly assembly)
 		{
-			if (assembly == null) throw new ArgumentNullException("assembly");
+			if (assembly == null) throw new ArgumentNullException(nameof(assembly));
 			try
 			{
 				return GetTypesProvider.Invoke(assembly).Where(type => type.IsVisible);
@@ -34,7 +34,7 @@ namespace FluentSecurity.Internals
 
 		internal static IEnumerable<Type> GetLoadableExportedTypes(this Assembly assembly)
 		{
-			if (assembly == null) throw new ArgumentNullException("assembly");
+			if (assembly == null) throw new ArgumentNullException(nameof(assembly));
 			try
 			{
 				return GetTypesProvider.Invoke(assembly).Where(type => type.IsVisible);

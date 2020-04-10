@@ -1,7 +1,8 @@
-﻿using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace FluentSecurity.SampleApplication.Areas.ExampleArea.Controllers
 {
+	[Area("ExampleArea")]
 	public class HomeController : Controller
 	{
 		public ActionResult Index()

@@ -8,12 +8,9 @@ namespace FluentSecurity.ServiceLocation.LifeCycles
 	{
 		private readonly ConcurrentDictionary<object, object> _objects = new ConcurrentDictionary<object, object>();
 
-		public int Count
-		{
-			get { return _objects.Count; }
-		}
+		public int Count => _objects.Count;
 
-		public object Get(object key)
+        public object Get(object key)
 		{
 			var hasInstance = Has(key);
 			return hasInstance ? _objects[key] : null;
@@ -25,8 +22,8 @@ namespace FluentSecurity.ServiceLocation.LifeCycles
 	
 			if (Has(key))
 			{
-				var message = string.Format("An instance for key {0} is already in the cache.", key);
-				throw new ArgumentException(message, "key");
+				var message = $"An instance for key {key} is already in the cache.";
+				throw new ArgumentException(message, nameof(key));
 			}
 
 			_objects[key] = instance;
@@ -40,8 +37,7 @@ namespace FluentSecurity.ServiceLocation.LifeCycles
 
 		private static void TryDispose(object cachedObject)
 		{
-			var disposable = cachedObject as IDisposable;
-			if (disposable != null) disposable.Dispose();
+            if (cachedObject is IDisposable disposable) disposable.Dispose();
 		}
 
 		private bool Has(object key)

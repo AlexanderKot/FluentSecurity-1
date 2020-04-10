@@ -13,10 +13,10 @@ namespace FluentSecurity.Caching
 			CacheLevel = cacheLevel;
 		}
 
-		public string ControllerName { get; private set; }
-		public string ActionName { get; private set; }
-		public Type PolicyType { get; private set; }
-		public Cache CacheLifecycle { get; private set; }
-		public By CacheLevel { get; private set; }
+		public string ControllerName { get; }
+		public string ActionName { get; }
+		public Type PolicyType { get; }
+		public Cache CacheLifecycle { get; }
+		public By CacheLevel { get; }
 	}
 }

@@ -9,7 +9,7 @@ namespace FluentSecurity.Configuration
 			Type = type;
 		}
 
-		public Type Type { get; private set; }
+		public Type Type { get; }
 		public bool Completed { get; private set; }
 
 		public void MarkCompleted()

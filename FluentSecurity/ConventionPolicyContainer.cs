@@ -13,10 +13,7 @@ namespace FluentSecurity
 
 		public ConventionPolicyContainer(IList<IPolicyContainerConfiguration> policyContainers, By defaultCacheLevel = By.Policy)
 		{
-			if (policyContainers == null)
-				throw new ArgumentNullException("policyContainers", "A list of policycontainers was not provided");
-			
-			_policyContainers = policyContainers;
+            _policyContainers = policyContainers ?? throw new ArgumentNullException(nameof(policyContainers), "A list of policycontainers was not provided");
 			_defaultCacheLevel = defaultCacheLevel;
 		}
 

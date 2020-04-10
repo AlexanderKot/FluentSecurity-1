@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Web.Routing;
+using Microsoft.AspNetCore.Routing;
 
 namespace FluentSecurity.Specification.Helpers
 {

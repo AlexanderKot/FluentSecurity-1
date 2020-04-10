@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using FluentSecurity.Diagnostics;
 using FluentSecurity.Diagnostics.Events;
 using FluentSecurity.Internals;
@@ -165,7 +165,7 @@ namespace FluentSecurity.Specification
 			
 			// Assert
 			Assert.That(exception.PolicyType, Is.EqualTo(typeof(DenyAnonymousAccessPolicy)));
-			Assert.That(exception.Message, Is.StringContaining("Anonymous access denied"));
+			Assert.That(exception.Message,  Does.Contain("Anonymous access denied"));
 		}
 	}
 
@@ -214,7 +214,7 @@ namespace FluentSecurity.Specification
 
 			// Assert
 			Assert.That(exception.PolicyType, Is.EqualTo(typeof(RequireAnyRolePolicy)));
-			Assert.That(exception.Message, Is.StringContaining("Anonymous access denied"));
+			Assert.That(exception.Message, Does.Contain("Anonymous access denied"));
 		}
 
 		[Test]
@@ -235,7 +235,7 @@ namespace FluentSecurity.Specification
 
 			// Assert
 			Assert.That(exception.PolicyType, Is.EqualTo(typeof(RequireAnyRolePolicy)));
-			Assert.That(exception.Message, Is.StringContaining("Access requires one of the following roles: Owner."));
+			Assert.That(exception.Message, Does.Contain("Access requires one of the following roles: Owner."));
 		}
 	}
 

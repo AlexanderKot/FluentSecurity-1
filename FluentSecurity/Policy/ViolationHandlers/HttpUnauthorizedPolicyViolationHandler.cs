@@ -1,5 +1,5 @@
 using System;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FluentSecurity.Specification.Policy.ViolationHandlers
 {
@@ -9,7 +9,7 @@ namespace FluentSecurity.Specification.Policy.ViolationHandlers
 		{
 			if (exception == null) throw new ArgumentNullException("exception");
 			
-			return new HttpUnauthorizedResult(exception.Message);
+			return new UnauthorizedResult(); //return new HttpUnauthorizedResult(exception.Message);
 		}
 	}
 }

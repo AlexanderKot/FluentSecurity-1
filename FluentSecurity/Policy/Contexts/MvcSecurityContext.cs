@@ -1,4 +1,4 @@
-﻿using System.Web.Routing;
+﻿using Microsoft.AspNetCore.Routing;
 
 namespace FluentSecurity.Policy.Contexts
 {
@@ -9,6 +9,6 @@ namespace FluentSecurity.Policy.Contexts
 			RouteValues = Data.RouteValues;
 		}
 
-		public RouteValueDictionary RouteValues { get; private set; }
+		public RouteValueDictionary RouteValues { get; }
 	}
 }

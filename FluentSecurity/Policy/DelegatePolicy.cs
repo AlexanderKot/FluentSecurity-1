@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using FluentSecurity.Policy.Contexts;
 using FluentSecurity.Policy.Results;
 
@@ -7,20 +7,17 @@ namespace FluentSecurity.Policy
 {
 	public class DelegatePolicy : ISecurityPolicy
 	{
-		public string Name { get; private set; }
-		public Func<DelegateSecurityContext, PolicyResult> Policy { get; private set; }
-		public Func<PolicyViolationException, ActionResult> ViolationHandler { get; private set; }
+		public string Name { get; }
+		public Func<DelegateSecurityContext, PolicyResult> Policy { get; }
+		public Func<PolicyViolationException, ActionResult> ViolationHandler { get; }
 
 		public DelegatePolicy(string uniqueName, Func<DelegateSecurityContext, PolicyResult> policyDelegate, Func<PolicyViolationException, ActionResult> violationHandlerDelegate = null)
 		{
-			if (String.IsNullOrWhiteSpace(uniqueName))
-				throw new ArgumentException("uniqueName");
+			if (string.IsNullOrWhiteSpace(uniqueName))
+				throw new ArgumentException(nameof(uniqueName));
 
-			if (policyDelegate == null)
-				throw new ArgumentNullException("policyDelegate");
-
-			Name = uniqueName;
-			Policy = policyDelegate;
+            Name = uniqueName;
+			Policy = policyDelegate ?? throw new ArgumentNullException(nameof(policyDelegate));
 			ViolationHandler = violationHandlerDelegate;
 		}
 

@@ -37,7 +37,7 @@ namespace FluentSecurity.ServiceLocation
 			Container = container;
 		}
 
-		private IContainer Container { get; set; }
+		private IContainer Container { get; }
 
 		internal static ServiceLocator Current
 		{

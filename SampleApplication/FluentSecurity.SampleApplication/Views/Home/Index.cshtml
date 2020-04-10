@@ -1,0 +1,103 @@
+﻿@{
+    
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    @using FluentSecurity.SampleApplication.Controllers
+    @using FluentSecurity.SampleApplication.Helpers
+    <asp:Content ContentPlaceHolderID="TitleContent" runat="server">Getting started</asp:Content>
+    <asp:Content ContentPlaceHolderID="MainContent" runat="server">
+        <h1>Fluent Security</h1>
+
+        <h2>Log in / Log out</h2>
+        <ul>
+            @if (Url.Action<AccountController>(x => x.LogInAsAdministrator()) != String.Empty)
+            {
+                <li><a href="/Account/LogInAsAdministrator"> Log in as administrator</a></li>
+            }
+            @if (Url.Action<AccountController>(x => x.LogInAsPublisher()) != String.Empty)
+            {
+                <li><a href="/Account/LogInAsPublisher"> Log in as publisher</a></li>
+            }
+            @if (Url.Action<AccountController>(x => x.LogOut()) != String.Empty)
+            {
+                <li><a href="/Account/LogOut"> Log out</a></li>
+            }
+        </ul>
+
+        <h2>Examples</h2>
+        <ul>
+            @if (Url.Action<ExampleController>(x => x.DenyAnonymousAccess()) != String.Empty)
+            {
+                <li><a href="Example/DenyAnonymousAccess">Deny anonymous access</a></li>
+            }
+            @if (Url.Action<ExampleController>(x => x.DenyAuthenticatedAccess()) != String.Empty)
+            {
+                <li><a href="Example/DenyAuthenticatedAccess">Deny authenticated access</a></li>
+            }
+            @if (Url.Action<ExampleController>(x => x.RequireAdministratorRole()) != String.Empty)
+            {
+                <li><a href="Example/RequireAdministratorRole">Require administrator role</a></li>
+            }
+            @if (Url.Action<ExampleController>(x => x.RequirePublisherRole()) != String.Empty)
+            {
+                <li><a href="Example/RequirePublisherRole">Require publisher role</a></li>
+            }
+            @if (Url.Action<ExampleController>(x => x.MissingConfiguration()) != String.Empty)
+            {
+                <li><a href="Example/MissingConfiguration">Missing configuration</a></li>
+            }
+        </ul>
+
+        <h3>Area examples</h3>
+        <p>Log in to see all the actions available</p>
+        <ul>
+            @if (Url.AreaAction<FluentSecurity.SampleApplication.Areas.ExampleArea.Controllers.HomeController>(x => x.Index(), "ExampleArea") != String.Empty)
+            {
+                <li><a href="ExampleArea">Index</a></li>
+            }
+            @if (Url.AreaAction<FluentSecurity.SampleApplication.Areas.ExampleArea.Controllers.HomeController>(x => x.PublishersOnly(), "ExampleArea") != String.Empty)
+            {
+                <li><a href="ExampleArea/Home/PublishersOnly">Publishers only</a></li>
+            }
+            @if (Url.AreaAction<FluentSecurity.SampleApplication.Areas.ExampleArea.Controllers.HomeController>(x => x.AdministratorsOnly(), "ExampleArea") != String.Empty)
+            {
+                <li><a href="ExampleArea/Home/AdministratorsOnly">Administrators only</a></li>
+            }
+        </ul>
+
+
+        <h2>What do I have</h2>
+        <pre>@Model.WhatDoIHave</pre>
+
+        <h2>Here's what is happening behind the scenes</h2>
+        <table style="font-size: .7em; table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th style="width: 190px;">Correlation Id</th>
+                    <th>Message</th>
+                    <th style="width: 80px;">Completed in</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var @event in FluentSecurity.SampleApplication.Bootstrapper.Events)
+                {
+                    <tr>
+                        <td>@Html.Encode(@event.CorrelationId)</td>
+                        <td style="word-wrap: break-word">@Html.Encode(@event.Message).Replace(Environment.NewLine, "<br/>")</td>
+                        <td>@(Html.Encode(@event.CompletedInMilliseconds) != null ? Html.Encode(@event.CompletedInMilliseconds) + " ms" : "-")</td>
+                    </tr>
+                 }
+            </tbody>
+        </table>
+    </asp:Content>
+</body>
+</html>

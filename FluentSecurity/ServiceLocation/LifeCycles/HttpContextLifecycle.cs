@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Web;
 
 namespace FluentSecurity.ServiceLocation.LifeCycles
 {
@@ -13,8 +12,8 @@ namespace FluentSecurity.ServiceLocation.LifeCycles
 
 		public HttpContextLifecycle()
 		{
-			HasContextResolver = () => HttpContext.Current != null;
-			DictionaryResolver = () => HttpContext.Current.Items;
+			HasContextResolver = () => SecurityRuntime.HttpContextAccessor.HttpContext != null;
+			DictionaryResolver = () => SecurityRuntime.HttpContextAccessor.HttpContext.Items as IDictionary;
 		}
 
 		public IObjectCache FindCache()

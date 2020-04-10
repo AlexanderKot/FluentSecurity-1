@@ -9,10 +9,7 @@ namespace FluentSecurity.Diagnostics
 
 		public AnonymousSecurityEventListener(Action<ISecurityEvent> eventListener)
 		{
-			if (eventListener == null)
-				throw new ArgumentNullException("eventListener");
-
-			EventListener = eventListener;
+            EventListener = eventListener ?? throw new ArgumentNullException(nameof(eventListener));
 		}
 
 		public void Handle(ISecurityEvent securityEvent)
@@ -21,7 +18,10 @@ namespace FluentSecurity.Diagnostics
 			{
 				EventListener.Invoke(securityEvent);
 			}
-			catch {}
-		}
+            catch
+            {
+                // ignored
+            }
+        }
 	}
 }

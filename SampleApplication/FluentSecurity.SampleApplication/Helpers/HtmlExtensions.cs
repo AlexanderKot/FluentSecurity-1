@@ -1,4 +1,6 @@
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace FluentSecurity.SampleApplication.Helpers
 {
@@ -40,8 +42,8 @@ namespace FluentSecurity.SampleApplication.Helpers
 			{
 				tagBuilder.MergeAttribute("class", "selected");
 			}
-			tagBuilder.InnerHtml = innerHtml;
-			var navigationLink = tagBuilder.ToString(TagRenderMode.Normal);
+			tagBuilder.InnerHtml.Append(innerHtml);
+			var navigationLink = tagBuilder.ToString();//ToString(TagRenderMode.Normal);
 
 			if (!string.IsNullOrEmpty(wrapperElement))
 			{
@@ -50,8 +52,8 @@ namespace FluentSecurity.SampleApplication.Helpers
 				{
 					wrapperElementBuilder.MergeAttribute("class", "selected");
 				}
-				wrapperElementBuilder.InnerHtml = navigationLink;
-				navigationLink = wrapperElementBuilder.ToString(TagRenderMode.Normal);
+				wrapperElementBuilder.InnerHtml.Append(navigationLink);
+				navigationLink = wrapperElementBuilder.ToString();//ToString(TagRenderMode.Normal);
 			}
 
 			return navigationLink;

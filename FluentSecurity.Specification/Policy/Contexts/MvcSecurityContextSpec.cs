@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Web.Routing;
+using Microsoft.AspNetCore.Routing;
 using FluentSecurity.Policy.Contexts;
 using FluentSecurity.Specification.Helpers;
 using NUnit.Framework;

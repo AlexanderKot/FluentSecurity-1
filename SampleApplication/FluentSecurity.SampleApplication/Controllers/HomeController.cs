@@ -1,4 +1,4 @@
-﻿using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using FluentSecurity.SampleApplication.Models;
 
 namespace FluentSecurity.SampleApplication.Controllers

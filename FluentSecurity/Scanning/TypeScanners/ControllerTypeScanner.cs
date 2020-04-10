@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using FluentSecurity.Internals;
 
 namespace FluentSecurity.Scanning.TypeScanners
 {
 	internal class ControllerTypeScanner : ITypeScanner
 	{
-		public Type ControllerType { get; private set; }
+		public Type ControllerType { get; }
 		
-		public ControllerTypeScanner() : this(typeof(IController)) {}
+		public ControllerTypeScanner() : this(typeof(Controller)) {}
 
 		public ControllerTypeScanner(Type controllerType)
 		{
-			if (controllerType == null) throw new ArgumentNullException("controllerType");
+			if (controllerType == null) throw new ArgumentNullException(nameof(controllerType));
 			
 			ControllerType = controllerType;
 		}

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace FluentSecurity.SampleApplication.Models
 {
@@ -10,5 +11,10 @@ namespace FluentSecurity.SampleApplication.Models
 		}
 
 		public IEnumerable<UserRole> Roles { get; set; }
+
+        public static implicit operator ClaimsPrincipal(User v)
+        {
+            return null;
+        }
 	}
 }

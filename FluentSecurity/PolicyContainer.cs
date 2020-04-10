@@ -20,13 +20,13 @@ namespace FluentSecurity
 		public PolicyContainer(string controllerName, string actionName, IPolicyAppender policyAppender)
 		{
 			if (controllerName.IsNullOrEmpty())
-				throw new ArgumentException("Controllername must not be null or empty!", "controllerName");
+				throw new ArgumentException("Controllername must not be null or empty!", nameof(controllerName));
 
 			if (actionName.IsNullOrEmpty())
-				throw new ArgumentException("Actionname must not be null or empty!", "actionName");
+				throw new ArgumentException("Actionname must not be null or empty!", nameof(actionName));
 
 			if (policyAppender == null)
-				throw new ArgumentNullException("policyAppender");
+				throw new ArgumentNullException(nameof(policyAppender));
 
 			_policies = new List<ISecurityPolicy>();
 
@@ -189,7 +189,7 @@ namespace FluentSecurity
 
 		public override string ToString()
 		{
-			return String.Format("{0} - {1} - {2}", base.ToString(), ControllerName, ActionName);
+			return $"{base.ToString()} - {ControllerName} - {ActionName}";
 		}
 	}
 }

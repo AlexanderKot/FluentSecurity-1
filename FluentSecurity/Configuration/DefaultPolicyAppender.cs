@@ -8,8 +8,8 @@ namespace FluentSecurity.Configuration
 	{
 		public void UpdatePolicies(ISecurityPolicy securityPolicyToAdd, IList<ISecurityPolicy> policies)
 		{
-			if (securityPolicyToAdd == null) throw new ArgumentNullException("securityPolicyToAdd");
-			if (policies == null) throw new ArgumentNullException("policies");
+			if (securityPolicyToAdd == null) throw new ArgumentNullException(nameof(securityPolicyToAdd));
+			if (policies == null) throw new ArgumentNullException(nameof(policies));
 
 			if (securityPolicyToAdd.IsPolicyOf<IgnorePolicy>())
 				policies.Clear();

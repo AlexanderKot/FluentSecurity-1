@@ -1,3 +1,4 @@
+using FluentSecurity.SampleApplication.Controllers;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,13 +21,13 @@ namespace FluentSecurity.SampleApplication.Helpers
 
 		public static bool UserIsAuthenticated()
 		{
-			var currentUser = SessionContext.Current.User;
+			var currentUser = new AccountController().GetCurrentUser();// SessionContext.Current.User;
 			return currentUser != null;
 		}
 
 		public static IEnumerable<object> UserRoles()
 		{
-			var currentUser = SessionContext.Current.User;
+			var currentUser = new AccountController().GetCurrentUser();//SessionContext.Current.User;
 			return currentUser != null ? currentUser.Roles.Cast<object>().ToArray() : null;
 		}
 	}

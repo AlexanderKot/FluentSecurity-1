@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Web.Mvc;
 using FluentSecurity.Caching;
 using FluentSecurity.Configuration;
 using FluentSecurity.Diagnostics;
@@ -13,6 +12,8 @@ using FluentSecurity.Policy.ViolationHandlers.Conventions;
 using FluentSecurity.Scanning;
 using FluentSecurity.Scanning.TypeScanners;
 using FluentSecurity.ServiceLocation;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FluentSecurity
 {
@@ -33,7 +34,12 @@ namespace FluentSecurity
 
 		public IPolicyContainerConfiguration For<TController>(Expression<Func<TController, object>> actionExpression) where TController : Controller
 		{
-			var controllerName = typeof(TController).GetControllerName();
+			return For(typeof (TController), actionExpression);
+		}
+
+		public IPolicyContainerConfiguration For<TController>(Type finalType, Expression<Func<TController, object>> actionExpression) where TController : Controller
+		{
+			var controllerName = finalType.GetControllerName();
 			var actionName = actionExpression.GetActionName();
 
 			return AddPolicyContainerFor(controllerName, actionName);
@@ -41,7 +47,12 @@ namespace FluentSecurity
 
 		public IPolicyContainerConfiguration For<TController>(Expression<Action<TController>> actionExpression) where TController : Controller
 		{
-			var controllerName = typeof(TController).GetControllerName();
+			return For(typeof (TController), actionExpression);
+		}
+
+		public IPolicyContainerConfiguration For<TController>(Type finalType, Expression<Action<TController>> actionExpression) where TController : Controller
+		{
+			var controllerName = finalType.GetControllerName();
 			var actionName = actionExpression.GetActionName();
 
 			return AddPolicyContainerFor(controllerName, actionName);
@@ -83,7 +94,7 @@ namespace FluentSecurity
 
 		public IPolicyContainerConfiguration ForAllControllersInheriting<TController>(Expression<Func<TController, object>> actionExpression, params Assembly[] assemblies) where TController : Controller
 		{
-			if (actionExpression == null) throw new ArgumentNullException("actionExpression");
+			if (actionExpression == null) throw new ArgumentNullException(nameof(actionExpression));
 			var actionName = actionExpression.GetActionName();
 			return ForAllControllersInheriting<TController>(action => action == actionName, assemblies);
 		}
@@ -159,8 +170,7 @@ namespace FluentSecurity
 
 		private void ApplyProfile(Type profileType)
 		{
-			var profile = Activator.CreateInstance(profileType) as SecurityProfile;
-			if (profile != null)
+			if (Activator.CreateInstance(profileType) is SecurityProfile profile)
 			{
 				Publish.ConfigurationEvent(() => "Applying profile {0}.".FormatWith(profile.GetType().FullName));
 				Runtime.ApplyConfiguration(profile);
@@ -190,16 +200,13 @@ namespace FluentSecurity
 
 		public void GetAuthenticationStatusFrom(Func<bool> authenticationExpression)
 		{
-			if (authenticationExpression == null)
-				throw new ArgumentNullException("authenticationExpression");
-
-			Runtime.IsAuthenticated = authenticationExpression;
+			Runtime.IsAuthenticated = authenticationExpression ?? throw new ArgumentNullException(nameof(authenticationExpression));
 		}
 
 		public void GetRolesFrom(Func<IEnumerable<object>> rolesExpression)
 		{
 			if (rolesExpression == null)
-				throw new ArgumentNullException("rolesExpression");
+				throw new ArgumentNullException(nameof(rolesExpression));
 
 			if (Runtime.PolicyContainers.Any())
 				throw new ConfigurationErrorsException("You must set the rolesfunction before adding policies.");
@@ -209,16 +216,13 @@ namespace FluentSecurity
 
 		public void SetPolicyAppender(IPolicyAppender policyAppender)
 		{
-			if (policyAppender == null)
-				throw new ArgumentNullException("policyAppender");
-			
-			PolicyAppender = policyAppender;
+            PolicyAppender = policyAppender ?? throw new ArgumentNullException(nameof(policyAppender));
 		}
 
 		public void ResolveServicesUsing(Func<Type, IEnumerable<object>> servicesLocator, Func<Type, object> singleServiceLocator = null)
 		{
 			if (servicesLocator == null)
-				throw new ArgumentNullException("servicesLocator");
+				throw new ArgumentNullException(nameof(servicesLocator));
 
 			ResolveServicesUsing(new ExternalServiceLocator(servicesLocator, singleServiceLocator));
 		}
@@ -226,9 +230,17 @@ namespace FluentSecurity
 		public void ResolveServicesUsing(ISecurityServiceLocator securityServiceLocator)
 		{
 			if (securityServiceLocator == null)
-				throw new ArgumentNullException("securityServiceLocator");
+				throw new ArgumentNullException(nameof(securityServiceLocator));
 
 			Runtime.ExternalServiceLocator = securityServiceLocator;
+		}
+
+		public void SetHttpContextAccessor(IHttpContextAccessor httpContextAccessor)
+		{
+			if (httpContextAccessor == null)
+				throw new ArgumentNullException("httpAccessor");
+
+			SecurityRuntime.HttpContextAccessor = httpContextAccessor;
 		}
 
 		public void DefaultPolicyViolationHandlerIs<TPolicyViolationHandler>() where TPolicyViolationHandler : class, IPolicyViolationHandler

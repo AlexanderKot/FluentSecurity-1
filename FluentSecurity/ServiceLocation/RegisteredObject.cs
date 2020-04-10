@@ -12,10 +12,10 @@ namespace FluentSecurity.ServiceLocation
 			Lifecycle = lifecycle;
 		}
 
-		public Type TypeToResolve { get; private set; }
-		public Guid InstanceKey { get; private set; }
-		public Func<IContainer, object> InstanceExpression { get; private set; }
-		public Lifecycle Lifecycle { get; private set; }
+		public Type TypeToResolve { get; }
+		public Guid InstanceKey { get; }
+		public Func<IContainer, object> InstanceExpression { get; }
+		public Lifecycle Lifecycle { get; }
 
 		public object CreateInstance(IContainer container)
 		{

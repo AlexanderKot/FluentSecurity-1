@@ -7,6 +7,6 @@ namespace FluentSecurity.Policy.Contexts
 			Policy = policy;
 		}
 
-		public ISecurityPolicy Policy { get; private set; }
+		public ISecurityPolicy Policy { get; }
 	}
 }

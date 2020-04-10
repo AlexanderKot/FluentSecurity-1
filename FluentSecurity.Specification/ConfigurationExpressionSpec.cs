@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using FluentSecurity.Configuration;
 using FluentSecurity.Policy.ViolationHandlers.Conventions;
 using FluentSecurity.Specification.Helpers;
@@ -306,7 +306,7 @@ namespace FluentSecurity.Specification
 			Assert.That(configurationExpression.Runtime.PolicyContainers.Count(), Is.EqualTo(1));
 		}
 
-		private class TaskController : AsyncController
+		private class TaskController : Controller
 		{
 			public Task<ActionResult> LongRunningAction()
 			{

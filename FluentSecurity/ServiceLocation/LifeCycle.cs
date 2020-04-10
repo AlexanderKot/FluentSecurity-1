@@ -17,6 +17,6 @@ namespace FluentSecurity.ServiceLocation
 			Instance = new TLifecycle();
 		}
 
-		public static ILifecycle Instance { get; private set; }
+		public static ILifecycle Instance { get; }
 	}
 }

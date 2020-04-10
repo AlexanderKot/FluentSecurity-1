@@ -10,8 +10,8 @@ namespace FluentSecurity.Diagnostics.Events
 			Message = message;
 		}
 
-		public Guid CorrelationId { get; private set; }
-		public string Message { get; private set; }
+		public Guid CorrelationId { get; }
+		public string Message { get; }
 		public long? CompletedInMilliseconds { get; set; }
 	}
 }

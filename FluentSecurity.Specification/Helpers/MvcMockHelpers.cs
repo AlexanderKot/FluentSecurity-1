@@ -1,31 +1,32 @@
 ﻿using System;
 using System.Collections.Specialized;
-using System.Web;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 
 namespace FluentSecurity.Specification.Helpers
 {
 	public static class MvcMockHelpers
 	{
-		public static HttpContextBase FakeHttpContext()
+		public static HttpContext FakeHttpContext()
 		{
-			var context = new Mock<HttpContextBase>();
-			var request = new Mock<HttpRequestBase>();
-			var response = new Mock<HttpResponseBase>();
-			var session = new Mock<HttpSessionStateBase>();
-			var server = new Mock<HttpServerUtilityBase>();
+			var context = new Mock<HttpContext>();
+			var request = new Mock<HttpRequest>();
+			var response = new Mock<HttpResponse>();
+			var session = new Mock<ISession>();
+			var server = new Mock<HttpContext>();
 
 			context.Setup(ctx => ctx.Request).Returns(request.Object);
 			context.Setup(ctx => ctx.Response).Returns(response.Object);
 			context.Setup(ctx => ctx.Session).Returns(session.Object);
-			context.Setup(ctx => ctx.Server).Returns(server.Object);
+			//context.Setup(ctx => ctx.Server).Returns(server.Object);
 
 			return context.Object;
 		}
 
-		public static HttpContextBase FakeHttpContext(string url)
+		public static HttpContext FakeHttpContext(string url)
 		{
-			HttpContextBase context = FakeHttpContext();
+			HttpContext context = FakeHttpContext();
 			context.Request.SetupRequestUrl(url);
 			return context;
 		}
@@ -37,11 +38,11 @@ namespace FluentSecurity.Specification.Helpers
 			return url;
 		}
 
-		static NameValueCollection GetQueryStringParameters(string url)
+		static QueryString GetQueryStringParameters(string url)
 		{
 			if (url.Contains("?"))
 			{
-				var parameters = new NameValueCollection();
+				var parameters = new QueryString();
 
 				string[] parts = url.Split("?".ToCharArray());
 				string[] keys = parts[1].Split("&".ToCharArray());
@@ -54,10 +55,10 @@ namespace FluentSecurity.Specification.Helpers
 
 				return parameters;
 			}
-			return null;
+			return QueryString.Empty;
 		}
 
-		private static void SetupRequestUrl(this HttpRequestBase request, string url)
+		private static void SetupRequestUrl(this HttpRequest request, string url)
 		{
 			if (url == null)
 				throw new ArgumentNullException("url");
@@ -69,10 +70,11 @@ namespace FluentSecurity.Specification.Helpers
 
 			mock.Setup(req => req.QueryString)
 				.Returns(GetQueryStringParameters(url));
-			mock.Setup(req => req.AppRelativeCurrentExecutionFilePath)
+			mock.Setup(req => req.PathBase) //AppRelativeCurrentExecutionFilePath)
 				.Returns(GetUrlFileName(url));
-			mock.Setup(req => req.PathInfo)
+			mock.Setup(req => req.Path)
 				.Returns(string.Empty);
 		}
 	}
+
 }

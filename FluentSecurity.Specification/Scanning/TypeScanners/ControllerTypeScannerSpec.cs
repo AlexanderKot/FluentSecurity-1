@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using FluentSecurity.Scanning.TypeScanners;
 using FluentSecurity.Specification.TestData.Controllers;
 using FluentSecurity.Specification.TestData.Controllers.BaseControllers;
@@ -16,7 +16,7 @@ namespace FluentSecurity.Specification.Scanning.TypeScanners
 		public void Should_set_the_controller_type_to_IController_for_empty_constructor()
 		{
 			// Arrange
-			var expectedType = typeof(IController);
+			var expectedType = typeof(Controller);
 
 			// Act
 			var scanner = new ControllerTypeScanner();
@@ -72,8 +72,8 @@ namespace FluentSecurity.Specification.Scanning.TypeScanners
 			var result = scanner.Scan(new[] { GetType().Assembly }).ToList();
 
 			// Assert
-			Assert.That(result.First(), Is.EqualTo(typeof(BaseController)));
-			Assert.That(result.Last(), Is.EqualTo(typeof(IneritingBaseController)));
+			Assert.That(result.First(), Is.EqualTo(typeof(IneritingBaseController)));
+			Assert.That(result.Last(), Is.EqualTo(typeof(BaseController)));
 			Assert.That(result.Count(), Is.EqualTo(2));
 		}
 

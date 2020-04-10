@@ -12,7 +12,7 @@ namespace FluentSecurity.Policy
 		public RequireAnyRolePolicy(params object[] requiredRoles)
 		{
 			if (requiredRoles == null)
-				throw new ArgumentNullException("requiredRoles", "Required roles must not be null");
+				throw new ArgumentNullException(nameof(requiredRoles), "Required roles must not be null");
 
 			if (requiredRoles.Length == 0)
 				throw new ArgumentException("Required roles must be specified");
@@ -39,12 +39,9 @@ namespace FluentSecurity.Policy
 			return PolicyResult.CreateSuccessResult(this);
 		}
 
-		public IEnumerable<object> RolesRequired
-		{
-			get { return _requiredRoles; }
-		}
+		public IEnumerable<object> RolesRequired => _requiredRoles;
 
-		public override bool Equals(object obj)
+        public override bool Equals(object obj)
 		{
 			return Equals(obj as RequireAnyRolePolicy);
 		}

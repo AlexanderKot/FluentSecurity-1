@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System.Web;
 using FluentSecurity.Diagnostics;
 using FluentSecurity.Diagnostics.Events;
-using FluentSecurity.SampleApplication.Areas.ExampleArea;
 using FluentSecurity.SampleApplication.Controllers;
 using FluentSecurity.SampleApplication.Models;
 
@@ -17,11 +15,12 @@ namespace FluentSecurity.SampleApplication
 			SecurityDoctor.Register(Events.Add);
 			SecurityConfigurator.Configure(configuration =>
 			{
+				configuration.Advanced.IgnoreMissingConfiguration();
 				configuration.GetAuthenticationStatusFrom(Helpers.SecurityHelper.UserIsAuthenticated);
 				configuration.GetRolesFrom(Helpers.SecurityHelper.UserRoles);
-
+				
 				configuration.DefaultPolicyViolationHandlerIs(() => new DefaultPolicyViolationHandler());
-				configuration.Advanced.ModifySecurityContext(context => context.Data.QueryString = HttpContext.Current.Request.QueryString);
+				configuration.Advanced.ModifySecurityContext(context => context.Data.QueryString = System.Web.HttpContext.Current.Request.QueryString);
 
 				configuration.For<HomeController>().Ignore();
 
@@ -34,16 +33,15 @@ namespace FluentSecurity.SampleApplication
 
 				configuration.For<ExampleController>(x => x.RequireAdministratorRole()).RequireAnyRole(UserRole.Administrator);
 				configuration.For<ExampleController>(x => x.RequirePublisherRole()).RequireAnyRole(UserRole.Publisher);
-
+				
 				configuration.For<AdminController>().AddPolicy(new AdministratorPolicy());
-				configuration.For<AdminController>(x => x.Delete()).DelegatePolicy("LocalOnlyPolicy",
-					context => HttpContext.Current.Request.IsLocal
+                configuration.For<AdminController>(x => x.Delete()).DelegatePolicy("LocalOnlyPolicy",
+                    context => false//System.Web.HttpContext.Current.Request.IsLocal
 					);
 
 				configuration.Scan(scan =>
 				{
 					scan.AssembliesFromApplicationBaseDirectory();
-					scan.IncludeNamespaceContainingType<ExampleAreaAreaRegistration>();
 					scan.LookForProfiles();
 				});
 

@@ -159,13 +159,13 @@ namespace FluentSecurity.Specification.Configuration
 	[Category("DefaultPolicyAppenderSpec")]
 	public class When_updating_policies_with_a_RequireRolePolicy : with_DefaultPolicyAppender
 	{
-		private RequireRolePolicy _requireRolePolicy;
+		private RequireAnyRolePolicy _requireRolePolicy;
 		private DenyAnonymousAccessPolicy _denyAnonymousAccessPolicy;
 
 		protected override void Context()
 		{
 			// Arrange
-			_requireRolePolicy = new RequireRolePolicy("Administrator");
+			_requireRolePolicy = new RequireAnyRolePolicy("Administrator");
 			_denyAnonymousAccessPolicy = new DenyAnonymousAccessPolicy();
 			Policies = new List<ISecurityPolicy>
 			{

@@ -11,8 +11,6 @@ using FluentSecurity.Specification.Helpers;
 using FluentSecurity.Specification.TestData;
 using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
-using MockRepository = Rhino.Mocks.MockRepository;
 
 namespace FluentSecurity.Specification
 {
@@ -440,20 +438,20 @@ namespace FluentSecurity.Specification
 		public void Should_invoke_the_isautheticated_and_roles_functions()
 		{
 			// Arrange
-			var context = MockRepository.GenerateMock<ISecurityContext>();
-			context.Expect(x => x.Runtime).Return(TestDataFactory.CreateSecurityRuntime()).Repeat.Once();
-			context.Expect(x => x.CurrentUserIsAuthenticated()).Return(true).Repeat.Once();
-			context.Expect(x => x.CurrentUserRoles()).Return(new List<object> { UserRole.Owner }.ToArray()).Repeat.Once();
-			context.Replay();
+			var context = new Mock<ISecurityContext>();
+			context.Setup(x => x.Runtime).Returns(TestDataFactory.CreateSecurityRuntime());
+			context.Setup(x => x.CurrentUserIsAuthenticated()).Returns(true);
+			context.Setup(x => x.CurrentUserRoles()).Returns(new List<object> { UserRole.Owner }.ToArray());
+			//context.Replay();
 			
 			var policyContainer = new PolicyContainer(TestDataFactory.ValidControllerName, TestDataFactory.ValidActionName, TestDataFactory.CreateValidPolicyAppender());
 			policyContainer.AddPolicy(new TestPolicy());
 
 			// Act
-			policyContainer.EnforcePolicies(context);
+			policyContainer.EnforcePolicies(context.Object);
 
 			// Assert
-			context.VerifyAllExpectations();
+			context.VerifyAll();
 		}
 
 		[Test]

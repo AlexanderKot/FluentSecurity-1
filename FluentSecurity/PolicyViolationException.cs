@@ -11,8 +11,8 @@ namespace FluentSecurity
 			PolicyType = PolicyResult.PolicyType;
 		}
 
-		public PolicyResult PolicyResult { get; private set; }
-		public Type PolicyType { get; private set; }
-		public ISecurityContext SecurityContext { get; private set; }
+		public PolicyResult PolicyResult { get; }
+		public Type PolicyType { get; }
+		public ISecurityContext SecurityContext { get; }
 	}
 }

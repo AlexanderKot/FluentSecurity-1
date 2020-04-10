@@ -18,8 +18,7 @@ namespace FluentSecurity.Caching
 		{
 			var customPolicyCacheKey = String.Empty;
 
-			var cacheKeyProvider = securityPolicy as ICacheKeyProvider;
-			if (cacheKeyProvider != null)
+            if (securityPolicy is ICacheKeyProvider cacheKeyProvider)
 			{
 				customPolicyCacheKey = cacheKeyProvider.Get(context);
 				if (customPolicyCacheKey != null)

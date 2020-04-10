@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using FluentSecurity.Policy;
 using FluentSecurity.Policy.Results;
 using FluentSecurity.Policy.ViolationHandlers;

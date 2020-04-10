@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Web.Mvc;
-using System.Web.Routing;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using FluentSecurity.Configuration;
 using FluentSecurity.Internals;
 using FluentSecurity.Policy;
 using FluentSecurity.Specification.TestData;
 using Moq;
+using Microsoft.AspNetCore.Mvc.Internal;
 
 namespace FluentSecurity.Specification.Helpers
 {
@@ -136,10 +137,10 @@ namespace FluentSecurity.Specification.Helpers
 				{ "action", actionName }
 			};
 
-			var route = new Route("some-url", routeValueDictionary, new MvcRouteHandler());
+			var route = new Route(null, "some-url", routeValueDictionary, null, null, null); //new Route("some-url", routeValueDictionary, new MvcRouteHandler());
 			if (!String.IsNullOrEmpty(areaName))
-				route.DataTokens = new RouteValueDictionary { { "area", areaName } };
-
+				//route.DataTokens = new RouteValueDictionary { { "area", areaName } };
+				route.DataTokens.Add("area", areaName); //
 			return route;
 		}
 	}

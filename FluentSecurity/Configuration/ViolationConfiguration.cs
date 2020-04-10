@@ -10,13 +10,12 @@ namespace FluentSecurity.Configuration
 
 		internal ViolationConfiguration(ConventionConfiguration conventionConfiguration)
 		{
-			if (conventionConfiguration == null) throw new ArgumentNullException("conventionConfiguration");
-			_conventionConfiguration = conventionConfiguration;
+            _conventionConfiguration = conventionConfiguration ?? throw new ArgumentNullException(nameof(conventionConfiguration));
 		}
 
 		public void AddConvention(IPolicyViolationHandlerConvention convention)
 		{
-			if (convention == null) throw new ArgumentNullException("convention");
+			if (convention == null) throw new ArgumentNullException(nameof(convention));
 			_conventionConfiguration.Insert(0, convention);
 		}
 
@@ -27,7 +26,7 @@ namespace FluentSecurity.Configuration
 
 		public void RemoveConventions(Func<IPolicyViolationHandlerConvention, bool> predicate)
 		{
-			if (predicate == null) throw new ArgumentNullException("predicate");
+			if (predicate == null) throw new ArgumentNullException(nameof(predicate));
 			
 			_conventionConfiguration.RemoveAll(convention =>
 				convention is IPolicyViolationHandlerConvention &&

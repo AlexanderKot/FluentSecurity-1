@@ -5,11 +5,11 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Mvc;
-using System.Web.Routing;
 using FluentSecurity.Caching;
 using FluentSecurity.Internals;
 using FluentSecurity.Policy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 
 namespace FluentSecurity
 {
@@ -129,12 +129,11 @@ namespace FluentSecurity
 		/// <returns>The name of the are</returns>
 		internal static string GetAreaName(this RouteData routeData)
 		{
-			object value;
-			if (routeData.DataTokens.TryGetValue("area", out value))
+			if (routeData.DataTokens.TryGetValue("area", out object value))
 			{
 				return (value as string);
 			}
-			return GetAreaName(routeData.Route);
+			return GetAreaName(routeData);//return GetAreaName(routeData.Route);
 		}
 
 		/// <summary>
@@ -144,11 +143,12 @@ namespace FluentSecurity
 		/// <returns>The name of the are</returns>
 		internal static string GetAreaName(this RouteBase route)
 		{
-			var areRoute = route as IRouteWithArea;
-			if (areRoute != null)
-			{
-				return areRoute.Area;
-			}
+			//var areRoute = route as IRouteWithArea;
+			//if (areRoute != null)
+			//{
+			//	return areRoute.Area;
+			//}
+
 			var standardRoute = route as Route;
 			if ((standardRoute != null) && (standardRoute.DataTokens != null))
 			{
@@ -162,8 +162,7 @@ namespace FluentSecurity
 		/// </summary>
 		internal static ISecurityPolicy EnsureNonLazyPolicy(this ISecurityPolicy securityPolicy)
 		{
-			var lazySecurityPolicy = securityPolicy as ILazySecurityPolicy;
-			return lazySecurityPolicy != null
+            return securityPolicy is ILazySecurityPolicy lazySecurityPolicy
 				? lazySecurityPolicy.Load()
 				: securityPolicy;
 		}

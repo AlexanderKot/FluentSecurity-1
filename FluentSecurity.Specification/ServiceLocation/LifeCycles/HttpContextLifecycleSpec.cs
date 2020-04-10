@@ -14,7 +14,7 @@ namespace FluentSecurity.Specification.ServiceLocation.LifeCycles
 		public void Should_return_false_when_not_available()
 		{
 			// Arrange
-			HttpContext.Current = null;
+			SecurityRuntime.HttpContextAccessor.HttpContext = null;
 			new HttpContextLifecycle(); // Will reset to original state
 
 			// Act
@@ -63,10 +63,12 @@ namespace FluentSecurity.Specification.ServiceLocation.LifeCycles
 			// Arrange
 			var cache = new ObjectCache();
 			cache.Set(Guid.NewGuid(), new object());
-			
-			var dictionary = new Dictionary<object, object>();
-			dictionary.Add(HttpContextLifecycle.CacheKey, cache);
-			
+
+			var dictionary = new Dictionary<object, object>
+			{
+				{ HttpContextLifecycle.CacheKey, cache }
+			};
+
 			var lifecycle = new HttpContextLifecycle();
 			HttpContextLifecycle.HasContextResolver = () => true;
 			HttpContextLifecycle.DictionaryResolver = () => dictionary;

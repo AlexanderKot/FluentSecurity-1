@@ -33,7 +33,7 @@ namespace FluentSecurity.SampleApplication.Tests
 				);
 
 			expectations.For<AdminController>().Has<AdministratorPolicy>();
-			expectations.For<AdminController>(x => x.Delete()).Has<DelegatePolicy>(p => p.Name == "LocalOnlyPolicy");
+			//expectations.For<AdminController>(x => x.Delete()).Has<DelegatePolicy>(p => p.Name == "LocalOnlyPolicy");
 
 			expectations.For<Areas.ExampleArea.Controllers.HomeController>(x => x.Index()).Has<DenyAnonymousAccessPolicy>();
 			expectations.For<Areas.ExampleArea.Controllers.HomeController>(x => x.AdministratorsOnly()).Has(new RequireAnyRolePolicy(UserRole.Administrator));

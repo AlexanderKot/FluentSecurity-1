@@ -1,11 +1,11 @@
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using FluentSecurity.Policy;
 
 namespace FluentSecurity.Specification.Helpers
 {
 	internal static class NameHelper
 	{
-		public static string Controller<TController>() where TController : IController
+		public static string Controller<TController>() where TController : Controller
 		{
 			return typeof (TController).FullName;
 		}
