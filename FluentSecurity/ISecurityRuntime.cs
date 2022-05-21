@@ -10,7 +10,7 @@ namespace FluentSecurity
 		Func<IEnumerable<object>> Roles { get; }
 		ISecurityServiceLocator ExternalServiceLocator { get; }
 		IEnumerable<Type> Profiles { get; }
-		IEnumerable<IPolicyContainer> PolicyContainers { get; }
+		IReadOnlyDictionary<(string controllerName, string actionName), IPolicyContainer> PolicyContainers { get; }
 		IEnumerable<IConvention> Conventions { get; }
 		Cache DefaultResultsCacheLifecycle { get; }
 		Action<ISecurityContext> SecurityContextModifyer { get; }

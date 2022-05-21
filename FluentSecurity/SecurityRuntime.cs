@@ -10,19 +10,19 @@ namespace FluentSecurity
 	internal class SecurityRuntime : ISecurityRuntime
 	{
 		private readonly List<ProfileImport> _profiles = new List<ProfileImport>();
-		private readonly List<IPolicyContainer> _policyContainers = new List<IPolicyContainer>();
+		private readonly Dictionary<(string controllerName, string actionName), IPolicyContainer> _policyContainers = new Dictionary<(string, string), IPolicyContainer>();
 		private readonly List<IConvention> _conventions = new List<IConvention>();
-		public static IHttpContextAccessor HttpContextAccessor;
+		public static    IHttpContextAccessor HttpContextAccessor;
 
 		public Func<bool> IsAuthenticated { get; internal set; }
 		public Func<IEnumerable<object>> Roles { get; internal set; }
 		public ISecurityServiceLocator ExternalServiceLocator { get; internal set; }
 
 		public IEnumerable<Type> Profiles { get { return _profiles.Where(pi => pi.Completed).Select(pi => pi.Type); } }
-		public IEnumerable<IPolicyContainer> PolicyContainers => _policyContainers.AsReadOnly();
-        public IEnumerable<IConvention> Conventions => _conventions.AsReadOnly();
+		public IReadOnlyDictionary<(string controllerName, string actionName), IPolicyContainer> PolicyContainers => _policyContainers;
+		public IEnumerable<IConvention> Conventions => _conventions.AsReadOnly();
 
-        public Cache DefaultResultsCacheLifecycle { get; internal set; }
+		public Cache DefaultResultsCacheLifecycle { get; internal set; }
 		public Action<ISecurityContext> SecurityContextModifyer { get; internal set; }
 		public bool ShouldIgnoreMissingConfiguration { get; internal set; }
 
@@ -67,10 +67,11 @@ namespace FluentSecurity
 		{
 			if (policyContainer == null) throw new ArgumentNullException(nameof(policyContainer));
 
-			var existingContainer = PolicyContainers.GetContainerFor(policyContainer.ControllerName, policyContainer.ActionName);
-			if (existingContainer != null) return (PolicyContainer) existingContainer;
+			var existingContainer = _policyContainers.GetContainerFor(policyContainer.ControllerName, policyContainer.ActionName);
+			if (existingContainer != null)
+				return (PolicyContainer) existingContainer;
 
-			_policyContainers.Add(policyContainer);
+			_policyContainers.Add((policyContainer.ControllerName.ToLowerInvariant(), policyContainer.ActionName.ToLowerInvariant()), policyContainer);
 
 			return policyContainer;
 		}

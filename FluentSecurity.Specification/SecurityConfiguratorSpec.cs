@@ -107,7 +107,7 @@ namespace FluentSecurity.Specification
 	[Category("SecurityConfiguratorSpec")]
 	public class When_I_configure_fluent_security_for_Blog_Index_and_Blog_AddPost
 	{
-		private IEnumerable<IPolicyContainer> _policyContainers;
+		private IReadOnlyDictionary<(string controllerName, string actionName), IPolicyContainer> _policyContainers;
 		private readonly string _controllerName = NameHelper.Controller<BlogController>();
 		const string IndexActionName = "Index";
 		const string AddPostActionName = "AddPost";
@@ -176,9 +176,9 @@ namespace FluentSecurity.Specification
 				configuration.For<BlogController>(x => x.Index());
 			});
 
-			Assert.That(SecurityConfiguration.Current.PolicyContainers.Count(), Is.EqualTo(1));
-			Assert.That(SecurityConfiguration.Current.PolicyContainers.First().ControllerName, Is.EqualTo(NameHelper.Controller<BlogController>()));
-			Assert.That(SecurityConfiguration.Current.PolicyContainers.First().ActionName, Is.EqualTo("Index"));
+			Assert.That(SecurityConfiguration.Current.PolicyContainers.Count, Is.EqualTo(1));
+			Assert.That(SecurityConfiguration.Current.PolicyContainers.First().Value.ControllerName, Is.EqualTo(NameHelper.Controller<BlogController>()));
+			Assert.That(SecurityConfiguration.Current.PolicyContainers.First().Value.ActionName, Is.EqualTo("Index"));
 		}
 	}
 

@@ -26,7 +26,7 @@ namespace FluentSecurity
 		}
 
 		public ISecurityRuntime Runtime { get; }
-		public IEnumerable<IPolicyContainer> PolicyContainers { get; }
+		public IReadOnlyDictionary<(string controllerName, string actionName), IPolicyContainer> PolicyContainers { get; }
 
 		public string WhatDoIHave()
 		{

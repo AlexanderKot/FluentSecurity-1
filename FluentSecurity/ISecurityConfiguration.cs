@@ -6,7 +6,7 @@ namespace FluentSecurity
 	public interface ISecurityConfiguration
 	{
 		ISecurityRuntime Runtime { get; }
-		IEnumerable<IPolicyContainer> PolicyContainers { get; }
+		IReadOnlyDictionary<(string controllerName, string actionName), IPolicyContainer> PolicyContainers { get; }
 		void AssertAllActionsAreConfigured();
 		void AssertAllActionsAreConfigured(Assembly[] assemblies);
 		string WhatDoIHave();

@@ -127,7 +127,7 @@ namespace FluentSecurity.Specification
 			// Assert
 			var policyContainer = configurationExpression.Runtime.PolicyContainers.First();
 
-			Assert.That(policyContainer.ActionName, Is.EqualTo("AliasedAction"));
+			Assert.That(policyContainer.Value.ActionName, Is.EqualTo("AliasedAction"));
 			Assert.That(configurationExpression.Runtime.PolicyContainers.Count(), Is.EqualTo(1));
 		}
 
@@ -259,7 +259,7 @@ namespace FluentSecurity.Specification
 			configurationExpression.For<BlogController>(x => x.AddPost());
 
 			// Assert
-			var policyContainers = configurationExpression.Runtime.PolicyContainers.ToList();
+            var policyContainers = configurationExpression.Runtime.PolicyContainers;
 			Assert.That(policyContainers.GetContainerFor(NameHelper.Controller<BlogController>(), "Index"), Is.Not.Null);
 			Assert.That(policyContainers.GetContainerFor(NameHelper.Controller<BlogController>(), "AddPost"), Is.Not.Null);
 			Assert.That(policyContainers.Count, Is.EqualTo(2));
@@ -283,8 +283,8 @@ namespace FluentSecurity.Specification
 			// Assert
 			var policyContainer = configurationExpression.Runtime.PolicyContainers.First();
 
-			Assert.That(policyContainer.ControllerName, Is.EqualTo(NameHelper.Controller<TaskController>()));
-			Assert.That(policyContainer.ActionName, Is.EqualTo("LongRunningAction"));
+			Assert.That(policyContainer.Value.ControllerName, Is.EqualTo(NameHelper.Controller<TaskController>()));
+			Assert.That(policyContainer.Value.ActionName, Is.EqualTo("LongRunningAction"));
 			Assert.That(configurationExpression.Runtime.PolicyContainers.Count(), Is.EqualTo(1));
 		}
 
@@ -301,9 +301,9 @@ namespace FluentSecurity.Specification
 			// Assert
 			var policyContainer = configurationExpression.Runtime.PolicyContainers.First();
 
-			Assert.That(policyContainer.ControllerName, Is.EqualTo(NameHelper.Controller<TaskController>()));
-			Assert.That(policyContainer.ActionName, Is.EqualTo("LongRunningJsonAction"));
-			Assert.That(configurationExpression.Runtime.PolicyContainers.Count(), Is.EqualTo(1));
+			Assert.That(policyContainer.Value.ControllerName, Is.EqualTo(NameHelper.Controller<TaskController>()));
+			Assert.That(policyContainer.Value.ActionName, Is.EqualTo("LongRunningJsonAction"));
+			Assert.That(configurationExpression.Runtime.PolicyContainers.Count, Is.EqualTo(1));
 		}
 
 		private class TaskController : Controller
@@ -348,7 +348,7 @@ namespace FluentSecurity.Specification
 			Because();
 
 			// Assert
-			var policyContainers = _configurationExpression.Runtime.PolicyContainers.ToList();
+			var policyContainers = _configurationExpression.Runtime.PolicyContainers;
 			Assert.That(policyContainers.GetContainerFor(expectedControllerName, "Index"), Is.Not.Null);
 			Assert.That(policyContainers.GetContainerFor(expectedControllerName, "ListPosts"), Is.Not.Null);
 			Assert.That(policyContainers.GetContainerFor(expectedControllerName, "AddPost"), Is.Not.Null);
@@ -385,7 +385,7 @@ namespace FluentSecurity.Specification
 			// Assert
 			var policyContainer = configurationExpression.Runtime.PolicyContainers.First();
 
-			Assert.That(policyContainer.ActionName, Is.EqualTo("AliasedAction"));
+			Assert.That(policyContainer.Value.ActionName, Is.EqualTo("AliasedAction"));
 			Assert.That(configurationExpression.Runtime.PolicyContainers.Count(), Is.EqualTo(1));
 		}
 

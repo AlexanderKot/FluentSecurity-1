@@ -22,10 +22,10 @@ namespace FluentSecurity
 		/// <param name="controllerName">The controllername</param>
 		/// <param name="actionName">The actionname</param>
 		/// <returns>A policycontainer</returns>
-		public static IPolicyContainer GetContainerFor(this IEnumerable<IPolicyContainer> policyContainers, string controllerName, string actionName)
-		{
-			return policyContainers.SingleOrDefault(x => x.ControllerName.ToLowerInvariant() == controllerName.ToLowerInvariant() && x.ActionName.ToLowerInvariant() == actionName.ToLowerInvariant());
-		}
+		public static IPolicyContainer GetContainerFor(this IReadOnlyDictionary<(string controllerName, string actionName), IPolicyContainer> policyContainers, string controllerName, string actionName)
+			=> policyContainers.TryGetValue((controllerName.ToLowerInvariant(), actionName.ToLowerInvariant()), out var cont)
+					? cont
+					: null;
 
 		///<summary>
 		/// Gets the controller name for the specified controller type

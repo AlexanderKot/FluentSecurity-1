@@ -21,7 +21,7 @@ namespace FluentSecurity.Specification.Configuration
 
 			// Assert
 			Assert.That(profile.Runtime.PolicyContainers.Any(), Is.True);
-			Assert.That(profile.Runtime.PolicyContainers.All(pc => pc.ControllerName.StartsWith(expectedNamespace)), Is.True);
+			Assert.That(profile.Runtime.PolicyContainers.All(pc => pc.Value.ControllerName.StartsWith(expectedNamespace)), Is.True);
 		}
 
 		private class ForAllControllersProfile : SecurityProfile

@@ -18,15 +18,15 @@ namespace FluentSecurity.Specification
 	[Category("ExtensionsSpecs")]
 	public class When_getting_the_container
 	{
-		private ICollection<IPolicyContainer> _containers;
+		private Dictionary<(string controllerName, string actionName), IPolicyContainer> _containers;
 
 		[SetUp]
 		public void SetUp()
 		{
 			// Arrange
-			_containers = new Collection<IPolicyContainer>
+			_containers = new Dictionary<(string controllerName, string actionName), IPolicyContainer>
 			{
-				TestDataFactory.CreateValidPolicyContainer("Controller", "ActionThatDoesExist")
+				{ ("controller", "actionthatdoesexist"), TestDataFactory.CreateValidPolicyContainer("Controller", "ActionThatDoesExist") }
 			};
 		}
 

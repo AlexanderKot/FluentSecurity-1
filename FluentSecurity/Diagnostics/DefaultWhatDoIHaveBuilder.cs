@@ -13,13 +13,13 @@ namespace FluentSecurity.Diagnostics
 
 			builder.AppendLine().AppendLine().AppendLine("------------------------------------------------------------------------------------").AppendLine();
 
-			foreach (var policyContainer in configuration.PolicyContainers.OrderBy(x => x.ActionName).OrderBy(x => x.ControllerName))
+			foreach (var policyContainer in configuration.PolicyContainers.OrderBy(x => x.Value.ControllerName).ThenBy(x => x.Value.ActionName))
 			{
 				builder.AppendFormat(
 					"{0} > {1}{2}",
-					policyContainer.ControllerName,
-					policyContainer.ActionName,
-					policyContainer.GetPolicies().ToText()
+					policyContainer.Value.ControllerName,
+					policyContainer.Value.ActionName,
+					policyContainer.Value.GetPolicies().ToText()
 					);
 				builder.AppendLine().AppendLine();
 			}
