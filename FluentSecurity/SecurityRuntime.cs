@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FluentSecurity.Caching;
 using FluentSecurity.Configuration;
@@ -10,7 +12,7 @@ namespace FluentSecurity
 	internal class SecurityRuntime : ISecurityRuntime
 	{
 		private readonly List<ProfileImport> _profiles = new List<ProfileImport>();
-		private readonly Dictionary<(string controllerName, string actionName), IPolicyContainer> _policyContainers = new Dictionary<(string, string), IPolicyContainer>();
+		private readonly Dictionary<(string controllerName, string actionName), IPolicyContainer> _policyContainers = new Dictionary<(string, string), IPolicyContainer>(new TwoStrTupeComparereIgnoreCase());
 		private readonly List<IConvention> _conventions = new List<IConvention>();
 		public static    IHttpContextAccessor HttpContextAccessor;
 
@@ -71,9 +73,32 @@ namespace FluentSecurity
 			if (existingContainer != null)
 				return (PolicyContainer) existingContainer;
 
-			_policyContainers.Add((policyContainer.ControllerName.ToLowerInvariant(), policyContainer.ActionName.ToLowerInvariant()), policyContainer);
+			_policyContainers.Add((string.Intern(policyContainer.ControllerName), string.Intern(policyContainer.ActionName)), policyContainer);
 
 			return policyContainer;
+		}
+
+		private sealed class TwoStrTupeComparereIgnoreCase : IEqualityComparer<(string, string)>
+		{
+			public bool Equals((string, string) x, (string, string) y)
+			{
+				var c = StringComparer.InvariantCultureIgnoreCase.Compare(x.Item1, y.Item1);
+				if( c != 0 )
+					return false;
+
+				return StringComparer.InvariantCultureIgnoreCase.Compare(x.Item2, y.Item2) == 0;
+			}
+
+			public int GetHashCode((string, string) obj)
+			{
+				unchecked
+				{
+					int hash = 17;
+					hash = hash * 31 + obj.Item1.GetHashCode(StringComparison.InvariantCultureIgnoreCase);
+					hash = hash * 31 + obj.Item1.GetHashCode(StringComparison.InvariantCultureIgnoreCase);
+					return hash;
+				}
+			}
 		}
 	}
 }
