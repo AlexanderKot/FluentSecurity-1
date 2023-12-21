@@ -339,3 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /Build/Output/net6.0
+/Build/Output/net7.0
