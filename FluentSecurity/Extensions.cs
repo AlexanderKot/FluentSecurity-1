@@ -23,11 +23,18 @@ namespace FluentSecurity
 		/// <param name="actionName">The actionname</param>
 		/// <returns>A policycontainer</returns>
 		public static IPolicyContainer GetContainerFor(this IReadOnlyDictionary<(string controllerName, string actionName), IPolicyContainer> policyContainers, string controllerName, string actionName)
-			=> policyContainers.TryGetValue((controllerName.ToLowerInvariant(), actionName.ToLowerInvariant()), out var cont)
-					? cont
-					: null;
+		{
+			if(policyContainers.TryGetValue((controllerName, actionName), out var cont))
+				return cont;
 
-		///<summary>
+			if(!actionName.EndsWith("async", StringComparison.InvariantCultureIgnoreCase)
+			 && policyContainers.TryGetValue((controllerName, actionName + "async"), out cont))
+				return cont;
+
+			return null;
+		}
+
+        ///<summary>
 		/// Gets the controller name for the specified controller type
 		///</summary>
 		public static string GetControllerName(this Type controllerType)
