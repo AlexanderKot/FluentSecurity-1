@@ -11,9 +11,9 @@ namespace FluentSecurity
 {
 	internal class SecurityRuntime : ISecurityRuntime
 	{
-		private readonly List<ProfileImport> _profiles = new List<ProfileImport>();
-		private readonly Dictionary<(string controllerName, string actionName), IPolicyContainer> _policyContainers = new Dictionary<(string, string), IPolicyContainer>(new TwoStrTupeComparereIgnoreCase());
-		private readonly List<IConvention> _conventions = new List<IConvention>();
+		private readonly List<ProfileImport> _profiles = new();
+		private readonly Dictionary<(string controllerName, string actionName), IPolicyContainer> _policyContainers = new(new TwoStrTupeComparereIgnoreCase());
+		private readonly List<IConvention> _conventions = new();
 		public static    IHttpContextAccessor HttpContextAccessor;
 
 		public Func<bool> IsAuthenticated { get; internal set; }
@@ -76,6 +76,11 @@ namespace FluentSecurity
 			_policyContainers.Add((string.Intern(policyContainer.ControllerName), string.Intern(policyContainer.ActionName)), policyContainer);
 
 			return policyContainer;
+		}
+
+		public void FinalizeConfiguration()
+		{
+			_policyContainers.TrimExcess();
 		}
 
 		private sealed class TwoStrTupeComparereIgnoreCase : IEqualityComparer<(string, string)>

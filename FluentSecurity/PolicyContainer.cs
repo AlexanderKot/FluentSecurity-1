@@ -15,7 +15,7 @@ namespace FluentSecurity
 		internal IPolicyAppender PolicyAppender;
 		internal readonly List<PolicyResultCacheStrategy> CacheStrategies;
 
-		private readonly IList<ISecurityPolicy> _policies;
+		private readonly List<ISecurityPolicy> _policies;
 
 		public PolicyContainer(string controllerName, string actionName, IPolicyAppender policyAppender)
 		{
@@ -28,7 +28,7 @@ namespace FluentSecurity
 			if (policyAppender == null)
 				throw new ArgumentNullException(nameof(policyAppender));
 
-			_policies = new List<ISecurityPolicy>();
+			_policies = new List<ISecurityPolicy>(1); //Better to do some resize, then have many sparced arrays during app lifetime
 
 			ControllerName = controllerName;
 			ActionName = actionName;

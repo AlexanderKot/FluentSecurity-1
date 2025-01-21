@@ -259,6 +259,11 @@ namespace FluentSecurity
 				);
 		}
 
+		public void FinalizeConfiguration()
+		{
+			Runtime.FinalizeConfiguration();
+		}
+
 		private void RemoveDefaultPolicyViolationHandlerConventions()
 		{
 			Advanced.Conventions(conventions =>
