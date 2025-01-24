@@ -195,7 +195,7 @@ namespace FluentSecurity
 
 		private PolicyContainer AddPolicyContainerFor(string controllerName, string actionName)
 		{
-			return Runtime.AddPolicyContainer(new PolicyContainer(controllerName, actionName, PolicyAppender));
+			return Runtime.AddPolicyContainer(new PolicyContainer(string.Intern(controllerName), string.Intern(actionName), PolicyAppender));
 		}
 
 		public void GetAuthenticationStatusFrom(Func<bool> authenticationExpression)

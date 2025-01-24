@@ -73,7 +73,7 @@ namespace FluentSecurity
 			if (existingContainer != null)
 				return (PolicyContainer) existingContainer;
 
-			_policyContainers.Add((string.Intern(policyContainer.ControllerName), string.Intern(policyContainer.ActionName)), policyContainer);
+			_policyContainers.Add((policyContainer.ControllerName, policyContainer.ActionName), policyContainer);
 
 			return policyContainer;
 		}
